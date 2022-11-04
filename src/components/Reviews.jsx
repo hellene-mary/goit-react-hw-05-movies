@@ -8,8 +8,6 @@ import { ReviewsInfoList } from './Reviews.styles';
 const Reviews = () => {
   const { movieId } = useParams();
   const [reviewsInfo, setReviewsInfo] = useState([]);
-  const location = useLocation();
-  console.log('location in Reviews', location.state.from);
 
   useEffect(() => {
     if (!movieId) {
