@@ -1,4 +1,4 @@
-import { Suspense, useState, useEffect } from 'react';
+import { Suspense, useState, useEffect, useRef } from 'react';
 import { Outlet, useParams, useLocation } from 'react-router-dom';
 import { HiChevronLeft } from 'react-icons/hi';
 
@@ -18,7 +18,8 @@ const MovieDetails = () => {
   const [movieInfo, setMovieInfo] = useState([]);
   const { movieId } = useParams();
   const location = useLocation();
-  const backLinkHref = location.state?.from ?? '/';
+  // const backLinkHref = location.state?.from ?? '/';
+  const backLinkHref = useRef(location.state?.from);
   console.log('backLinkHref', backLinkHref);
 
   useEffect(() => {
@@ -41,7 +42,7 @@ const MovieDetails = () => {
 
   return (
     <Container>
-      <GoBack to={backLinkHref}>
+      <GoBack to={backLinkHref.current ?? '/'}>
         <HiChevronLeft />
         Go back
       </GoBack>
@@ -55,9 +56,7 @@ const MovieDetails = () => {
             <MoreInfoLink to={'cast'}>Cast</MoreInfoLink>
           </li>
           <li>
-            <MoreInfoLink to={'reviews'} state={{ from: location }}>
-              Reviews
-            </MoreInfoLink>
+            <MoreInfoLink to={'reviews'}>Reviews</MoreInfoLink>
           </li>
         </MoreInfoList>
       </Box>
