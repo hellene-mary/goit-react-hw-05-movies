@@ -7,8 +7,8 @@ import { moviesQueryRequest } from '../components/api';
 // сторінка пошуку кінофільмів за ключовим словом.
 
 const Movies = () => {
-  // const [query, setQuery] = useState('');
   const [moviesFound, setMoviesFound] = useState([]);
+  const [noResult, setNoResult] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get('search');
   const location = useLocation();
@@ -25,6 +25,7 @@ const Movies = () => {
   }
 
   useEffect(() => {
+    setNoResult(false);
     if (!query) {
       return;
     }
@@ -32,7 +33,8 @@ const Movies = () => {
       const res = await moviesQueryRequest(query);
       const movies = res.data.results;
       if (movies.length === 0) {
-        console.log('Not result');
+        // console.log('Not result');
+        setNoResult(true);
         return;
       }
       setMoviesFound(movies);
@@ -54,7 +56,7 @@ const Movies = () => {
         ></input>
         <button type="submit">Search</button>
       </Form>
-      {query && (
+      {query && !noResult && (
         <MoviesList>
           {moviesFound.map(({ id, name, title }) => (
             <li key={id}>
@@ -65,6 +67,7 @@ const Movies = () => {
           ))}
         </MoviesList>
       )}
+      {noResult && <div>Sorry, there are no results for your query!</div>}
     </Container>
   );
 };
