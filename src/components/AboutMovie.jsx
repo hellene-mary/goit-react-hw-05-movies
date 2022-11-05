@@ -1,4 +1,5 @@
 import { Container } from './AboutMovie.styles';
+import PropTypes from 'prop-types';
 
 export const AboutMovie = ({ movieInfo }) => {
   const {
@@ -19,7 +20,6 @@ export const AboutMovie = ({ movieInfo }) => {
           alt="poster"
         ></img>
       ) : (
-        // <img src="../images/noImage.jpg" alt="poster"></img>
         <div>No image</div>
       )}
       <div>
@@ -39,4 +39,16 @@ export const AboutMovie = ({ movieInfo }) => {
       </div>
     </Container>
   );
+};
+
+AboutMovie.propTypes = {
+  movieInfo: PropTypes.shape({
+    title: PropTypes.string,
+    original_title: PropTypes.string,
+    overview: PropTypes.string,
+    popularity: PropTypes.number,
+    genres: PropTypes.array,
+    poster_path: PropTypes.string,
+    status: PropTypes.string,
+  }).isRequired,
 };
