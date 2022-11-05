@@ -11,16 +11,15 @@ import {
 } from './../components/Layout.styles';
 import { movieInfoRequest } from '../components/api';
 import { AboutMovie } from '../components/AboutMovie';
+import { EventsLoader } from 'components/Loader';
 
 // /сторінка з детальною інформацією про кінофільм
-// !add spiner
 const MovieDetails = () => {
   const [movieInfo, setMovieInfo] = useState([]);
   const { movieId } = useParams();
   const location = useLocation();
-  // const backLinkHref = location.state?.from ?? '/';
   const backLinkHref = useRef(location.state?.from);
-  console.log('backLinkHref', backLinkHref);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!movieId) {
@@ -33,6 +32,7 @@ const MovieDetails = () => {
         return;
       }
       setMovieInfo(res.data);
+      setIsLoading(false);
     })();
 
     return () => {
@@ -47,7 +47,8 @@ const MovieDetails = () => {
         Go back
       </GoBack>
 
-      <AboutMovie movieInfo={movieInfo} />
+      {isLoading && <EventsLoader />}
+      {!isLoading && <AboutMovie movieInfo={movieInfo} />}
 
       <Box>
         <p>Additional information</p>
