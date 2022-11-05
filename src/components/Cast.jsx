@@ -3,12 +3,14 @@ import { useState, useEffect } from 'react';
 
 import { castRequest } from '../components/api';
 import { CastList, NoImage } from './Cast.styles';
+import { Catalog } from 'components/Loader';
 
 //  компонент Cast, інформація про акторський склад. Рендериться на сторінці MovieDetails.
 
 const Cast = () => {
   const { movieId } = useParams();
   const [castInfo, setCastInfo] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!movieId) {
@@ -18,6 +20,7 @@ const Cast = () => {
     (async function castInfo() {
       const res = await castRequest(movieId);
       setCastInfo(res.data.cast);
+      setIsLoading(false);
     })();
 
     return () => {
@@ -25,13 +28,10 @@ const Cast = () => {
     };
   }, [movieId]);
 
-  // const { character, name, profile_path } = castInfo;
-
   return (
     <>
-      {castInfo.length === 0 ? (
-        <div>We don`t have information for this movie</div>
-      ) : (
+      {isLoading && <Catalog />}
+      {!isLoading && (
         <CastList>
           {castInfo.map(({ id, character, name, profile_path }) => {
             return (
@@ -56,6 +56,9 @@ const Cast = () => {
             );
           })}
         </CastList>
+      )}
+      {!isLoading && castInfo.length === 0 && (
+        <div>We don`t have information for this movie</div>
       )}
     </>
   );
